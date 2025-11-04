@@ -1,0 +1,8 @@
+[
+    {"id": "A (NS)", "start": 0, "finish": 25},
+    {"id": "B (EW)", "start": 5, "finish": 15},
+    {"id": "C (NS)", "start": 15, "finish": 30},
+    {"id": "D (EW)", "start": 20, "finish": 40},
+    {"id": "E (NS)", "start": 35, "finish": 50},
+    {"id": "F (EW)", "start": 45, "finish": 55}
+]

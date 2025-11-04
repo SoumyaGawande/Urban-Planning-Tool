@@ -1,0 +1,21 @@
+{
+    "nodes": [
+        {"id": "N1", "name": "Sitabuldi"}, {"id": "N2", "name": "Dharampeth"}, {"id": "N3", "name": "Civil Lines"}, {"id": "N4", "name": "Ramdaspeth"}, {"id": "N5", "name": "Lakadganj"}, {"id": "N6", "name": "Itwari"}, {"id": "N7", "name": "Nandanvan"}, {"id": "N8", "name": "Besa"}, {"id": "N9", "name": "Manish Nagar"}, {"id": "N10", "name": "Pratap Nagar"}, {"id": "N11", "name": "Shankar Nagar"}, {"id": "N12", "name": "Gokulpeth"}, {"id": "N13", "name": "Ambazari"}, {"id": "N14", "name": "Hingna"}, {"id": "N15", "name": "MIDC"}, {"id": "N16", "name": "Koradi"}, {"id": "N17", "name": "Sonegaon"}, {"id": "N18", "name": "Ajni"}, {"id": "N19", "name": "Indora"}, {"id": "N20", "name": "Wadi"}, {"id": "N21", "name": "Jaitala"}, {"id": "N22", "name": "Pardi"}, {"id": "N23", "name": "Ganeshpeth"}, {"id": "N24", "name": "Sadar"}, {"id": "N25", "name": "Vayusena Nagar"}, {"id": "N26", "name": "Godhani"}, {"id": "N27", "name": "Lalganj"}, {"id": "N28", "name": "Mhalgi Nagar"}, {"id": "N29", "name": "Zingabai Takli"}, {"id": "N30", "name": "Mangalwari"}, {"id": "N31", "name": "Yashodhara Nagar"}, {"id": "N32", "name": "Bhandara Road"}, {"id": "N33", "name": "Wardhaman Nagar"}, {"id": "N34", "name": "Kamptee"}, {"id": "N35", "name": "Katol Road"}, {"id": "N36", "name": "Bezonbagh"}, {"id": "N37", "name": "Mankapur"}, {"id": "N38", "name": "Gittikhadan"}, {"id": "N39", "name": "Chinchbhuvan"}, {"id": "N40", "name": "Trimurti Nagar"}, {"id": "N41", "name": "Vasant Nagar"}, {"id": "N42", "name": "Somalwada"}, {"id": "N43", "name": "Uday Nagar"}, {"id": "N44", "name": "Hajaripahad"}, {"id": "N45", "name": "Patwardhan Ground"}, {"id": "N46", "name": "Vivekanand Nagar"}, {"id": "N47", "name": "Khamla"}, {"id": "N48", "name": "Besar"}, {"id": "N49", "name": "Chakki Khapa"}, {"id": "N50", "name": "Hudkeshwar"}
+    ],
+    "edges": [
+        ["N1", "N2", 5], ["N1", "N3", 8], ["N2", "N4", 12], ["N3", "N5", 7],
+        ["N4", "N6", 4], ["N5", "N7", 10], ["N6", "N7", 3], ["N4", "N8", 15],
+        ["N8", "N9", 2], ["N9", "N10", 6], ["N1", "N10", 18], ["N3", "N4", 3],
+        ["N1", "N11", 10], ["N2", "N12", 9], ["N3", "N13", 11], ["N7", "N14", 25],
+        ["N10", "N15", 13], ["N5", "N16", 30], ["N16", "N19", 2], ["N18", "N4", 5],
+        ["N19", "N27", 6], ["N11", "N12", 4], ["N12", "N13", 5], ["N13", "N14", 6], ["N14", "N15", 3],
+        ["N15", "N16", 5], ["N16", "N17", 4], ["N17", "N18", 8], ["N18", "N19", 9],
+        ["N19", "N20", 4], ["N20", "N11", 6], ["N21", "N22", 3], ["N22", "N23", 4], ["N23", "N24", 5], ["N24", "N25", 7],
+        ["N25", "N26", 8], ["N26", "N27", 4], ["N27", "N28", 2], ["N28", "N29", 3],
+        ["N29", "N30", 5], ["N30", "N21", 7], ["N31", "N32", 6], ["N32", "N33", 4], ["N33", "N34", 3], ["N34", "N35", 9],
+        ["N35", "N36", 5], ["N36", "N37", 3], ["N37", "N38", 4], ["N38", "N39", 5],
+        ["N39", "N40", 6], ["N40", "N31", 7], ["N41", "N42", 2], ["N42", "N43", 3], ["N43", "N44", 4], ["N44", "N45", 5],
+        ["N45", "N46", 3], ["N46", "N47", 2], ["N47", "N48", 4], ["N48", "N49", 6],
+        ["N49", "N50", 7], ["N50", "N41", 8], ["N1", "N21", 15], ["N10", "N31", 18], ["N20", "N40", 12], ["N30", "N50", 16]
+    ]
+}

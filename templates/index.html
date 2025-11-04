@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nagpur City Planner: Optimization Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .result-box {
+            background-color: #e8f5e9; 
+            border-left: 5px solid #4caf50; 
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #388e3c; 
+            margin-bottom: 5px;
+        }
+        .visual-path {
+            font-family: monospace;
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 3px;
+            color: #007bff; 
+        }
+        .city-map-container {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .city-map-legend {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 10px;
+        }
+        .city-map-text pre {
+            font-family: monospace;
+            white-space: pre-wrap; 
+            line-height: 1.3;
+            font-size: 12px; 
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 3px;
+        }
+        .node-list {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nagpur City Planner: Optimization Dashboard</h1>
+        <p>This tool applies specialized algorithms to solve resource allocation and logistics problems within the Nagpur metropolitan area.</p>
+        
+        <div class="city-map-container">
+            <h2>Nagpur Network Map & Connections (60 Edges)</h2>
+            <p><strong>Available Node IDs (N1-N50) and corresponding areas:</strong></p>
+            <p class="node-list">
+                {% for node in networkNodes %}
+                    <span style="display: inline-block; width: 180px;">
+                        <strong>{{ node.id }}</strong> ({{ node.name }}){% if not loop.last %}, {% endif %}
+                    </span>
+                {% endfor %}
+            </p>
+
+            <p style="margin-top: 15px;"><strong>Full Network Connections (Edge List with Costs):</strong></p>
+            <pre class="city-map-text" style="height: 250px; overflow-y: scroll;">
+{% for edge in all_network_edges %}
+{{ edge }}
+{% endfor %}
+            </pre>
+            <p class="city-map-legend">This list defines the full graph structure used by Features 1, 3, and 5.</p>
+        </div>
+        <div class="algo-section" id="feature-1">
+            <h2>1. 🚨 Emergency Response Route Planner</h2>
+            <p><strong>Functionality:</strong> Finds the fastest path for emergency vehicles by applying the shortest path algorithm to the city network model.</p>
+            <p class="node-list">Available Nodes: 
+                {% for node in networkNodes %}
+                    <strong>{{ node.id }}</strong> ({{ node.name }}){% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <form method="POST" action="/solve-dijkstra">
+                <input type="text" name="startNode" placeholder="Start Node ID (e.g., N1)" required>
+                <input type="text" name="endNode" placeholder="End Node ID (e.g., N7)" required>
+                <button type="submit">Calculate Fastest Route</button>
+            </form>
+            {% if dijkstraResult %}
+                <div class="result-box">
+                    <p class="result-title">✅ Optimal Route Found:</p>
+                    <p>Sequence of Stops: <span class="visual-path">{{ dijkstraResult.path }}</span></p>
+                    <p>Total Travel Distance/Time: <strong>{{ dijkstraResult.distance }} units</strong></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="algo-section" id="feature-2">
+            <h2>2. 💰 Budget Maximizer: Maximize Project Value</h2>
+            <p><strong>Functionality:</strong> Uses the Knapsack algorithm to select the optimal mix of projects that maximizes total public benefit while strictly staying within the allocated budget.</p>
+            <p><strong>Available Projects:</strong> Approx. 30 tasks available (e.g., Health Clinics, Road Repair, IT Upgrades, etc.).</p>
+            <p><strong>Cost Unit:</strong> Costs are measured in **Lakhs (L)**. Enter your budget in Lakhs.</p>
+            <form method="POST" action="/solve-knapsack">
+                <input type="number" name="maxBudget" placeholder="Max Budget (e.g., 500 Lakhs)" required>
+                <button type="submit">Allocate Budget</button>
+            </form>
+            {% if knapsackResult %}
+                <div class="result-box">
+                    <p class="result-title">✅ Optimal Project Portfolio:</p>
+                    <p>Maximum Total Benefit: <strong>{{ knapsackResult.maxBenefit }} Points</strong></p>
+                    <p>Total Budget Used: <strong>{{ knapsackResult.totalCost }} Lakhs</strong></p>
+                    <p>Approved Projects: <strong>{{ knapsackResult.selectedProjects|join(", ") }}</strong></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="algo-section" id="feature-3">
+            <h2>3. 💧 Minimize Cost: Utility Network Design</h2>
+            <p><strong>Functionality:</strong> Applies the Minimum Spanning Tree (MST) algorithm to find the single least expensive network that connects all utility service points.</p>
+            <form method="POST" action="/solve-mst">
+                <button type="submit">Calculate Minimum Network Cost</button>
+            </form>
+            {% if mstResult %}
+                <div class="result-box">
+                    <p class="result-title">✅ Minimal Utility Connections:</p>
+                    <p>Total Minimum Construction Cost: <strong>{{ mstResult.cost }} units</strong></p>
+                    <p>Required Connections (Segments):</p>
+                    <pre>{{ mstResult.edges|join("\n") }}</pre>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="algo-section" id="feature-4">
+            <h2>4. 🗺️ Define Land Boundary (Zoning Tool)</h2>
+            <p><strong>Functionality:</strong> Uses the Convex Hull algorithm on survey coordinates to define the smallest, most efficient legal boundary enclosing a target area (from 50 Nagpur localities).</p>
+            <p>Analyzes 50 Pre-loaded coordinates. <span style="color: #999;">({{ hullResult.error if hullResult.error else 'Ready.' }})</span></p>
+            <form method="POST" action="/solve-hull">
+                <button type="submit">Calculate Optimal Boundary</button>
+            </form>
+            {% if hullResult and not hullResult.error %}
+                <div class="result-box">
+                    <p class="result-title">✅ Defined Boundary:</p>
+                    <p>Calculated Land Area: <strong>{{ hullResult.area }} units²</strong></p>
+                    <p>Corner Points (Hull Vertices):</p>
+                    <pre>{{ hullResult.hullPointsStr }}</pre>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="algo-section" id="feature-5">
+            <h2>5. 📶 Non-Interfering Sensor Placement</h2>
+            <p><strong>Functionality:</strong> Uses the N-Queen backtracking method to find non-overlapping positions for sensors (or Wi-Fi hotspots) on a grid zone, maximizing coverage without interference.</p>
+            <form method="POST" action="/solve-sensors">
+                <input type="number" name="numSensors" placeholder="Number of Sensors (N)" required>
+                <button type="submit">Find Placement</button>
+            </form>
+            {% if sensorResult %}
+                <div class="result-box">
+                    {% if sensorResult.success %}
+                        <p class="result-title">✅ Optimal Placement Found for {{ sensorResult.n }} Sensors:</p>
+                        
+                        <p><strong>Visual Grid (S=Sensor, .=Empty):</strong></p>
+                        <pre style="font-size: 1.2em;">{{ sensorResult.visualGrid }}</pre> 
+                        
+                        <p style="margin-top: 10px;">Coordinates (Row, Column, 0-indexed):</p>
+                        <pre>{{ sensorResult.coordinates|join("\n") }}</pre>
+                        <p>Total Valid Solutions: {{ sensorResult.count }}</p>
+
+                    {% else %}
+                        <p class="result-title" style="color: red;">❌ No Valid Placement Found</p>
+                        <p>It is impossible to place {{ sensorResult.n }} non-interfering sensors on an N x N grid.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+            
+
+        <div class="algo-section" id="feature-6">
+            <h2>6. 🚨 Emergency Response Proximity Checker</h2>
+            <p><strong>Functionality:</strong> Uses the Closest Pair algorithm on all 50 Nagpur locality coordinates to identify the two incident sites closest to each other, optimizing dual dispatch.</p>
+            <p>Analyzed Incidents (50+ Nagpur Localities): 
+                {% for point in emergency_points[:5] %}
+                    {{ point.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}... (Total {{ emergency_points|length }} locations)
+            </p>
+            <form method="POST" action="/check-proximity">
+                <button type="submit">Find Closest Incidents</button>
+            </form>
+            {% if proximityResult %}
+                <div class="result-box">
+                    <p class="result-title">✅ Closest Incident Pair Found (Proximity Check):</p>
+                    <p>Pair: <strong>{{ proximityResult.pair_1_name }}</strong> and <strong>{{ proximityResult.pair_2_name }}</strong></p>
+                    <p>Distance: <strong>{{ proximityResult.distance }} units</strong></p>
+                    <p>Coordinates: {{ proximityResult.pair_1_coords }} and {{ proximityResult.pair_2_coords }}</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        
+
+        
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const anchor = window.location.hash;
+            if (anchor) {
+                const element = document.getElementById(anchor.substring(1));
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
